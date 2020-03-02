@@ -1,0 +1,30 @@
+version: "3"
+
+services: 
+    flask-server:
+        container_name: flask-app
+        image: python-env
+        ports:
+            - "9000:9000"
+        environment:
+            PORT: 9000
+            HOST: 0.0.0.0
+        volumes:
+            - .:/workspace
+        command: python hello_world.py
+        networks:
+            test-network:
+                aliases:
+                    - flask
+    
+    call-api:
+        build: ./callapi/
+        tty: true
+        networks:
+            test-network:
+                aliases:
+                    - callapi
+
+networks:
+    test-network:
+        external: true
